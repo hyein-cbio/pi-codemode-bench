@@ -1,0 +1,21 @@
+{
+  "name": "pi-codemode-bench",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "description": "Small speed-benchmark scheme for Pi QuickJS codemode and OpenCode codemode_o.",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "scripts": {
+    "bench": "node bench.mjs",
+    "bench:smoke": "node bench.mjs --warmup=1 --samples=1 --cases=even-squares-10",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "1.0.0",
+    "@opencode/codemode": "2.1.0",
+    "effect": "4.0.1"
+  }
+}
