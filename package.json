@@ -1,25 +1,57 @@
 {
   "name": "pi-codemode-bench",
-  "version": "0.1.0",
-  "publishConfig": { "access": "public", "registry": "https://registry.npmjs.org/" },
+  "version": "0.1.1",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "license": "MIT",
   "type": "module",
   "description": "Implementation-neutral, correctness-gated benchmarks for configurable codemode-compatible tools and runtimes.",
-  "repository": { "type": "git", "url": "git+https://github.com/hyein-cbio/pi-codemode-bench.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyein-cbio/pi-codemode-bench.git"
+  },
   "homepage": "https://github.com/hyein-cbio/pi-codemode-bench#readme",
-  "bugs": { "url": "https://github.com/hyein-cbio/pi-codemode-bench/issues" },
-  "keywords": ["benchmark", "codemode", "latency", "correctness", "tool-calling"],
-  "bin": { "codemode-bench": "./bench.mjs" },
+  "bugs": {
+    "url": "https://github.com/hyein-cbio/pi-codemode-bench/issues"
+  },
+  "keywords": [
+    "benchmark",
+    "codemode",
+    "latency",
+    "correctness",
+    "tool-calling"
+  ],
+  "bin": {
+    "codemode-bench": "./bench.mjs"
+  },
   "main": "./index.mjs",
   "types": "./index.d.ts",
   "exports": {
-    ".": { "types": "./index.d.ts", "import": "./index.mjs" },
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs"
+    },
     "./package.json": "./package.json"
   },
   "files": [
-    "bench.mjs", "index.mjs", "index.d.ts", "cases.mjs", "tasks.mjs", "bench.config.example.json",
-    "lib/", "adapters/", "corpus/", "examples/", "scripts/", "docs/", "benchmarks/",
-    "CHANGELOG.md", "CONTRIBUTING.md", "SECURITY.md"
+    "bench.mjs",
+    "index.mjs",
+    "index.d.ts",
+    "cases.mjs",
+    "tasks.mjs",
+    "bench.config.example.json",
+    "lib/",
+    "adapters/",
+    "corpus/",
+    "examples/",
+    "scripts/",
+    "docs/",
+    "benchmarks/",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md"
   ],
   "engines": {
     "node": ">=22.19.0"
@@ -56,9 +88,15 @@
     "effect": "4.0.1"
   },
   "peerDependenciesMeta": {
-    "@earendil-works/pi-coding-agent": { "optional": true },
-    "@opencode/codemode": { "optional": true },
-    "effect": { "optional": true }
+    "@earendil-works/pi-coding-agent": {
+      "optional": true
+    },
+    "@opencode/codemode": {
+      "optional": true
+    },
+    "effect": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@earendil-works/pi-coding-agent": "1.0.4",

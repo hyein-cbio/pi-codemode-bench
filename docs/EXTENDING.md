@@ -1,16 +1,16 @@
 # Standalone use and foreign-language integrations
 
-The host requires Node 22.19+. Pi/OpenCode and the target interpreter are not bundled runtime requirements of the generic core. Install your own interpreter or trusted backend separately. For the 0.1.0 registry release, install `pi-codemode-bench@0.1.0`. A locally produced npm tarball is an alternative.
+The host requires Node 22.19+. Pi/OpenCode and the target interpreter are not bundled runtime requirements of the generic core. Install your own interpreter or trusted backend separately. For the 0.1.1 registry release, install `pi-codemode-bench@0.1.1`. A locally produced npm tarball is an alternative.
 
 ## Consume from another project
 
 In the consumer project:
 
 ```sh
-npm install pi-codemode-bench@0.1.0
+npm install pi-codemode-bench@0.1.1
 # Or create a tarball from a source checkout with npm pack --ignore-scripts,
 # then install its actual path instead:
-# npm install /path/to/pi-codemode-bench-0.1.0.tgz
+# npm install /path/to/pi-codemode-bench-0.1.1.tgz
 npx --no-install codemode-bench --config=./targets.json --sets=all --check
 npx --no-install codemode-bench --config=./targets.json --sets=short
 ```

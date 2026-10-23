@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.1 - Optional engine package resolution (2026-10-23)
+
+### Fixed
+
+- Resolve optional engine packages from installed consumers so the CLI and runtime adapters work outside the repository checkout.
+- Declare optional engine peer dependencies and report actionable installation instructions when they are missing.
+
+### Added
+
+- Packed-package smoke tests with and without optional engine peers, plus package resolution regression tests.
+- Installation guidance for optional engine peers.
+
+The engine resolution changes originate from commit `4a165fe24e4b657e64a1186d8288de403de67531`. Historical benchmark measurements and their source identities are unchanged.
+
 ## 0.1.0 - Initial release (2026-10-23)
 
 ### Added

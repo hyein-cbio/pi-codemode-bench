@@ -20,10 +20,10 @@ No execution target is selected automatically. A missing or failed tool never si
 
 ## Installation
 
-Requires **Node 22.19 or later**. For the **0.1.0** registry release, install into your project:
+Requires **Node 22.19 or later**. For the **0.1.1** registry release, install into your project:
 
 ```sh
-npm install pi-codemode-bench@0.1.0
+npm install pi-codemode-bench@0.1.1
 npx --no-install codemode-bench --help
 ```
 
@@ -76,7 +76,7 @@ npm pack --ignore-scripts --pack-destination=results/dist
 Then, from your consumer project, install that file using its absolute path:
 
 ```sh
-npm install --ignore-scripts /absolute/path/to/pi-codemode-bench/results/dist/pi-codemode-bench-0.1.0.tgz
+npm install --ignore-scripts /absolute/path/to/pi-codemode-bench/results/dist/pi-codemode-bench-0.1.1.tgz
 npx --no-install codemode-bench --help
 ```
 
