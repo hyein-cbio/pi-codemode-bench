@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "targets": [
+    {
+      "id": "local-demo",
+      "kind": "tool",
+      "tool": "run_script",
+      "adapter": "./examples/node-tool-client.mjs",
+      "language": "javascript",
+      "capabilities": [
+        "tools",
+        "classes",
+        "deep-json",
+        "per-call-deadline"
+      ]
+    }
+  ]
+}

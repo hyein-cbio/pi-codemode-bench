@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "targets": [
+    {
+      "kind": "pi-tool",
+      "tool": "codemode_o",
+      "extensions": [
+        "../../../pi-opencode-mode/index.js"
+      ],
+      "resultFormat": "json-text",
+      "capabilities": [
+        "tools"
+      ],
+      "maxToolCalls": 64
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "sources": [
+    "../python-sources.mjs"
+  ],
+  "targets": [
+    {
+      "id": "python-jsonl",
+      "kind": "tool",
+      "tool": "run_python",
+      "adapter": "../python-tool-client.mjs",
+      "language": "python",
+      "capabilities": [
+        "tools",
+        "per-call-deadline"
+      ]
+    }
+  ]
+}

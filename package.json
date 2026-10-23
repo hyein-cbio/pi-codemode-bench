@@ -4,16 +4,38 @@
   "private": true,
   "license": "MIT",
   "type": "module",
-  "description": "Small speed-benchmark scheme for Pi QuickJS codemode and OpenCode codemode_o.",
+  "description": "Implementation-neutral, correctness-gated benchmarks for configurable codemode-compatible tools and runtimes.",
+  "bin": { "codemode-bench": "./bench.mjs" },
+  "main": "./index.mjs",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": { "types": "./index.d.ts", "import": "./index.mjs" },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "bench.mjs", "index.mjs", "index.d.ts", "cases.mjs", "tasks.mjs", "bench.config.example.json",
+    "lib/", "adapters/", "corpus/", "examples/", "scripts/", "docs/", "benchmarks/"
+  ],
   "engines": {
     "node": ">=22.19.0"
   },
   "scripts": {
     "bench": "node bench.mjs",
-    "bench:smoke": "node bench.mjs --warmup=1 --samples=1 --cases=even-squares-10",
-    "test": "node --test test/*.test.mjs"
+    "bench:smoke": "node bench.mjs --warmup=1 --samples=1 --sets=smoke,short",
+    "bench:all": "node bench.mjs --sets=all",
+    "bench:json": "node bench.mjs --sets=json-scale",
+    "bench:stress": "node bench.mjs --sets=stress",
+    "bench:list": "node bench.mjs --sets=all --list",
+    "bench:demo": "node bench.mjs --config=bench.config.example.json --sets=smoke,short --warmup=1 --samples=1",
+    "bench:example": "node bench.mjs --config=examples/targets/pi-comparison.json --sets=all --warmup=4 --samples=20 --seed=1",
+    "check:language": "node scripts/check-language.mjs",
+    "tasks": "node tasks.mjs --list",
+    "test": "node --test --test-concurrency=1 test/*.test.mjs",
+    "test:integration": "node --test test/integration.test.mjs",
+    "test:targets": "node --test test/targets.test.mjs",
+    "test:core": "node --test test/corpus.test.mjs test/fixtures.test.mjs test/generic-tool.test.mjs"
   },
-  "dependencies": {
+  "devDependencies": {
     "@earendil-works/pi-coding-agent": "1.0.0",
     "@opencode/codemode": "2.1.0",
     "effect": "4.0.1"

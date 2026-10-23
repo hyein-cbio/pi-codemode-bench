@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "targets": [
+    {
+      "kind": "pi-tool",
+      "tool": "codemode",
+      "extensions": [
+        "builtin:codemode"
+      ]
+    }
+  ]
+}
