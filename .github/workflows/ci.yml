@@ -22,9 +22,6 @@ jobs:
       - run: npm run check:language
       - run: npm test
       - run: npm run bench:demo -- --out=results/ci-demo.json
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: benchmark-${{ matrix.os }}
-          path: results/
-          if-no-files-found: ignore
+      # Raw receipts contain paths, configuration and traces. Never upload results/.
+      - name: Write allowlisted validation summary
+        run: node scripts/ci-summary.mjs results/ci-demo.json >> "$GITHUB_STEP_SUMMARY"

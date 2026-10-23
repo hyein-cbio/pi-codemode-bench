@@ -63,6 +63,10 @@ export interface FixtureTrace {
 export interface EngineMetadata {
   name: string; kind: string; language: string; capabilities: string[]; version: string | null;
   toolName: string | null; lifecycle: string; clock: string; maxToolCalls: number | null;
+  extensionHashes?: Record<string, string>;
+  extensionSources?: Record<string, {
+    revision: string | null; status: string | null; packageSha256: string | null; lockSha256: string | null;
+  }>;
 }
 export interface BenchmarkRow {
   case: string; engine: string; phase: "cold" | "warmup" | "warm" | "eligibility";

@@ -314,6 +314,10 @@ Nested tools are controlled in-memory fixtures, not real file I/O, production tr
 
 Distribution files are explicitly allowlisted; tests and CI configuration are not included. `npm test` also packs and extracts the real tarball, then executes all demo cases without dependencies or a lockfile. A missing bundled lockfile is recorded as a null hash, not silently treated as pinned dependencies. Use a source checkout and `npm ci` for locked Pi/OpenCode studies. Package publication remains disabled by `private: true` pending an explicit release decision.
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development checks, [SECURITY.md](SECURITY.md) for trust boundaries and private reporting, [CHANGELOG.md](CHANGELOG.md) for release notes, and [the release checklist](docs/RELEASING.md) for maintainer-only publication steps.
+
 All repository content must be in English, including documentation, comments, examples, fixtures, and public artifacts. Run `npm run check:language` before submitting changes. The automated gate detects Hangul; English-language review is still required.
 
-The pinned development dependency tree has a previously reported high-severity `brace-expansion` advisory. Do not expose these test integrations as a general-purpose service. Dependency versions have not been silently upgraded to change benchmark results.
+The Pi SDK's transitive `brace-expansion` is explicitly overridden to **5.0.12** to address the previously disclosed denial-of-service advisories. Pi SDK is now pinned to **1.0.4**, whose package does not ship the override-blocking shrinkwrap from 1.0.0. Its coordinated Pi packages are also overridden to **1.0.4** to avoid incompatible caret-range upgrades; OpenCode CodeMode and Effect remain pinned at their earlier versions. Historical timings retain their original dependency hashes; new measurements are separate snapshots. Run `npm audit` for current advisories, and never expose these trusted-code integrations as a general-purpose service.
+
+CI publishes only an allowlisted numeric demo-validation summary. Raw `results/` receipts are never uploaded as Actions artifacts.

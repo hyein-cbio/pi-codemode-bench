@@ -1,6 +1,18 @@
 # Local validation record
 
-Validated on macOS arm64, Apple M5 Pro, Node **v26.12.1**. Pi **1.0.0**, OpenCode CodeMode **2.1.0**, Effect **4.0.1** remain pinned. The historical checkpoints below are correctness smoke observations. The separate repeated README example is linked below and must not be pooled with those checkpoints.
+Validated on macOS arm64, Apple M5 Pro, Node **v26.12.1**. The current release candidate uses Pi SDK and coordinated Pi packages **1.0.4**, OpenCode CodeMode **2.1.0**, Effect **4.0.1**, and `brace-expansion` **5.0.12**. Historical checkpoints below used Pi **1.0.0** unless noted; their smoke observations and repeated timing samples are not pooled with new measurements.
+
+## Release housekeeping checkpoint
+
+The updated dependency lockfile installs with `npm ci --ignore-scripts`. `npm audit` and `npm audit --omit=dev` report **0 vulnerabilities** at this checkpoint. SDK 1.0.0 shipped a nested shrinkwrap that prevented the transitive security override; SDK 1.0.4 removes it. Companion Pi packages are overridden to 1.0.4 because unconstrained caret resolution to 1.4.0 broke the older SDK's codemode imports.
+
+The full suite with a separately cloned, clean `pi-opencode-mode` checkout passed **51 tests, 0 failed, 0 skipped**. New regressions cover allowlisted numeric CI summaries, rejection of dirty or unavailable committed measurement sources, changed extension package/lock commits, package-relative Git blob lookup in nested repositories, package metadata, distribution of policy documents and removal of raw artifact uploads.
+
+The latest existing remote workflow, [39877696480](https://github.com/hyein-cbio/pi-codemode-bench/actions/runs/39877696480), passed Linux/macOS Node 22 for commit `0eb3afa`. That is evidence for the previous commit, **not** remote validation of these unpushed housekeeping changes. Re-run CI on the final pushed release candidate.
+
+CodeRabbit completed the housekeeping source review with **0 remaining findings** after fixes for measurement-bound extension metadata, clean export checkout verification and package-relative Git blob lookup.
+
+Raw CI artifacts are no longer uploaded. CI writes only fixed labels and validated numeric demo counts to its job summary. Historical benchmark samples remain immutable; the release comparison is a separate clean-source run. No repository visibility change, Git push or npm publication is part of this checkpoint.
 
 ## Standalone and extension checkpoint
 
@@ -82,8 +94,8 @@ The target tests additionally cover config-relative paths, unknown keys/IDs, rem
 - All-phase failure gating, expected errors without speed statistics and strict coverage exit status.
 - Prompt exports without solutions and candidate grading with null generation/token/cost fields.
 
-A GitHub Actions matrix for Linux/macOS with Node 22 is added in `.github/workflows/ci.yml`. **Remote CI has not been run in this local task**; Node 22/Linux compatibility is not inferred from the local Node 26/macOS pass. Python is an optional local example and not a CI prerequisite.
+A GitHub Actions matrix for Linux/macOS with Node 22 is configured in `.github/workflows/ci.yml`. Remote CI was not run at this historical checkpoint; see the current release housekeeping checkpoint above for later remote evidence. Node 22/Linux compatibility is not inferred from a local Node 26/macOS pass. Python is an optional local example and not a CI prerequisite.
 
-## Known dependency warning
+## Historical dependency warning (resolved for the release candidate)
 
-`npm audit --json` reports **one high-severity transitive dependency**, `brace-expansion` under the pinned Pi package, with brace-expansion denial-of-service advisories. The fixed replay does not invoke real glob tools. Runtime/lock versions were deliberately not upgraded during benchmark implementation; this is a disclosed outstanding dependency issue, not a clean security audit. Evaluate a separate dependency update and rebaseline its timings before exposing any general-purpose service.
+At the original Pi 1.0.0 checkpoint, `npm audit --json` reported **one high-severity transitive dependency**, `brace-expansion` under the pinned Pi package, with brace-expansion denial-of-service advisories. The fixed replay does not invoke real glob tools. Runtime/lock versions were deliberately not upgraded during that measurement. The release housekeeping checkpoint above resolves the reported advisory with a separate dependency update and a separate timing baseline; it does not rewrite the historical result. These integrations are still not a general-purpose service.
