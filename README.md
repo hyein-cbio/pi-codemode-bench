@@ -20,7 +20,14 @@ No execution target is selected automatically. A missing or failed tool never si
 
 ## Installation
 
-Requires **Node 22.19 or later**. Choose a source checkout or a locally built npm tarball. The package is still `private: true` and is **not published to npm**; do not assume `npm install pi-codemode-bench` is available.
+Requires **Node 22.19 or later**. For the **0.1.0** registry release, install into your project:
+
+```sh
+npm install pi-codemode-bench@0.1.0
+npx --no-install codemode-bench --help
+```
+
+A source checkout or locally built npm tarball also works, as described below.
 
 ### Option A: run from source
 
@@ -316,7 +323,7 @@ Nested tools are controlled in-memory fixtures, not real file I/O, production tr
 
 ## Contribution and release policy
 
-Distribution files are explicitly allowlisted; tests and CI configuration are not included. `npm test` also packs and extracts the real tarball, then executes all demo cases without dependencies or a lockfile. A missing bundled lockfile is recorded as a null hash, not silently treated as pinned dependencies. Use a source checkout and `npm ci` for locked Pi/OpenCode studies. Package publication remains disabled by `private: true` pending an explicit release decision.
+Distribution files are explicitly allowlisted; tests and CI configuration are not included. `npm test` also packs and extracts the real tarball, then executes all demo cases without dependencies or a lockfile. A missing bundled lockfile is recorded as a null hash, not silently treated as pinned dependencies. Use a source checkout and `npm ci` for locked Pi/OpenCode studies. Package publication is an explicit maintainer action; no CI workflow automatically publishes releases.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development checks, [SECURITY.md](SECURITY.md) for trust boundaries and private reporting, [CHANGELOG.md](CHANGELOG.md) for release notes, and [the release checklist](docs/RELEASING.md) for maintainer-only publication steps.
 

@@ -94,6 +94,9 @@ test("extension package or lock commits after measurement cannot relabel depende
 test("release metadata identifies the repository and CI never uploads raw receipts", async () => {
   const pkg = JSON.parse(await readFile(new URL("package.json", root), "utf8"));
   const lock = JSON.parse(await readFile(new URL("package-lock.json", root), "utf8"));
+  assert.notEqual(pkg.private, true);
+  assert.equal(pkg.publishConfig.access, "public");
+  assert.equal(pkg.publishConfig.registry, "https://registry.npmjs.org/");
   assert.equal(lock.version, pkg.version);
   assert.equal(lock.packages[""].version, pkg.version);
   for (const path of ["README.md", "docs/EXTENDING.md"]) {

@@ -1,7 +1,7 @@
 {
   "name": "pi-codemode-bench",
   "version": "0.1.0",
-  "private": true,
+  "publishConfig": { "access": "public", "registry": "https://registry.npmjs.org/" },
   "license": "MIT",
   "type": "module",
   "description": "Implementation-neutral, correctness-gated benchmarks for configurable codemode-compatible tools and runtimes.",

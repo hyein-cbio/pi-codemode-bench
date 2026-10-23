@@ -50,6 +50,6 @@ Commit only sanitized JSON/Markdown and the updated README table afterward. Keep
 
 The maintainer controls when the repository becomes public and when commits/tags are pushed. A GitHub Release can then be created from the release tag using the changelog as its notes. No raw `results/` files belong in release assets.
 
-For npm, deliberately remove `private: true`, ensure the intended name/version is available, refresh the lockfile, rerun all checks and inspect the actual tarball. Replace the README's unpublished-package instructions only when publication really succeeds. The source measurement remains attached to its original revision; do not rewrite its hashes after changing package metadata.
+For npm, confirm that `private: true` is absent, the intended name/version is available, and `publishConfig` selects the public npm registry. Refresh the lockfile if needed, rerun all checks and inspect the actual tarball. Registry installation instructions must match the published version; do not report publication success until the registry confirms it. The source measurement remains attached to its original revision; do not rewrite its hashes after changing package metadata.
 
 No workflow in this repository automatically pushes, changes visibility or publishes to npm.
