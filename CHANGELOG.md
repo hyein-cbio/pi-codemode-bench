@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.0.1 - Initial release candidate
+## 0.1.0 - Initial release (unreleased)
 
 ### Added
 

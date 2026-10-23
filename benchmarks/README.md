@@ -11,7 +11,7 @@ These artifacts are **optional implementation examples**, not mandatory benchmar
 
 Run started **2026-10-23T11:38:02.261Z** on Apple M5 Pro, macOS arm64, Node **26.12.1**. Both tools used isolated Pi **1.0.4** SDK sessions with coordinated Pi packages overridden to **1.0.4** and `brace-expansion` **5.0.12**.
 
-Benchmark source is clean commit [`484627b84d81873d487a116f20fd08da0f761439`](https://github.com/hyein-cbio/pi-codemode-bench/commit/484627b84d81873d487a116f20fd08da0f761439). Every published benchmark implementation/config hash matches a file at that revision. The later release commit adds these results and documentation; it does not change the measurement source.
+Benchmark source is clean commit [`484627b84d81873d487a116f20fd08da0f761439`](https://github.com/hyein-cbio/pi-codemode-bench/commit/484627b84d81873d487a116f20fd08da0f761439). Every published benchmark implementation/config hash matches a file at that revision. Later commits add these results, documentation and the **0.1.0** release version metadata; they do not change the measurement source. The measured benchmark package identity remains **0.0.1** at that source commit, and its original hashes are preserved.
 
 “Native Pi” means the built-in **QuickJS codemode tool**, not a native-code VM or the Luau implementation. `codemode_o` was provided by the actual **0.0.1** extension pinned at revision `53b9dd937ad53cd3558b086ab21e812780524d5a`, using OpenCode CodeMode **2.1.0** and Effect **4.0.1**. Its entry/package/lock files match that clean revision. Revision and package/lock hashes were recorded before timing and verified at export. Installed dependency bytes are not recursively fingerprinted.
 

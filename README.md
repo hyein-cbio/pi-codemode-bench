@@ -55,7 +55,7 @@ npm pack --ignore-scripts --pack-destination=results/dist
 Then, from your consumer project, install that file using its absolute path:
 
 ```sh
-npm install --ignore-scripts /absolute/path/to/pi-codemode-bench/results/dist/pi-codemode-bench-0.0.1.tgz
+npm install --ignore-scripts /absolute/path/to/pi-codemode-bench/results/dist/pi-codemode-bench-0.1.0.tgz
 npx --no-install codemode-bench --help
 ```
 

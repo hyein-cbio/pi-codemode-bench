@@ -93,6 +93,15 @@ test("extension package or lock commits after measurement cannot relabel depende
 
 test("release metadata identifies the repository and CI never uploads raw receipts", async () => {
   const pkg = JSON.parse(await readFile(new URL("package.json", root), "utf8"));
+  const lock = JSON.parse(await readFile(new URL("package-lock.json", root), "utf8"));
+  assert.equal(lock.version, pkg.version);
+  assert.equal(lock.packages[""].version, pkg.version);
+  for (const path of ["README.md", "docs/EXTENDING.md"]) {
+    const doc = await readFile(new URL(path, root), "utf8");
+    assert.ok(doc.includes(`${pkg.name}-${pkg.version}.tgz`), path);
+  }
+  const changelog = await readFile(new URL("CHANGELOG.md", root), "utf8");
+  assert.ok(changelog.includes(`## ${pkg.version} - `));
   assert.equal(pkg.devDependencies["@earendil-works/pi-coding-agent"], "1.0.4");
   for (const name of ["chord", "pi-agent-core", "pi-ai", "pi-codemode", "pi-mcp", "pi-tui"]) {
     assert.equal(pkg.overrides["@earendil-works/" + name], "1.0.4");

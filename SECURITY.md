@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are developed on `main` and included in the latest 0.0.x release. Older snapshots and historical benchmark results are not maintained execution environments. No response-time guarantee is offered.
+Security fixes are developed on `main` and included in the latest 0.1.x release. Older snapshots and historical benchmark results are not maintained execution environments. No response-time guarantee is offered.
 
 ## Reporting a vulnerability
 

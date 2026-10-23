@@ -36,7 +36,7 @@ node scripts/publish-example.mjs results/release-comparison.json benchmarks/resu
 
 Use new paths: the runner/exporter refuse overwrites. Run the exporter from the same clean benchmark revision used for measurement. It checks source hashes against that committed revision, compares the extension revision and package/lock hashes captured before timing, and refuses dirty or changed export checkouts. It does not recursively attest every installed dependency byte.
 
-Commit only sanitized JSON/Markdown and the updated README table afterward. Keep raw receipts private under `results/`. Preserve earlier results separately and label their limitations. The final release commit will normally differ from the measurement source commit because it adds the resulting public evidence; the artifact's `provenance.benchmarkHead` remains the measurement source.
+Commit only sanitized JSON/Markdown and the updated README table afterward. Keep raw receipts private under `results/`. Preserve earlier results separately and label their limitations. The final release commit will normally differ from the measurement source commit because it adds public evidence and release metadata; the artifact's `provenance.benchmarkHead` remains the measurement source. The 0.1.0 release retains measurements from the 0.0.1 source snapshot at `484627b`; do not relabel those historical receipts or rewrite their package/config hashes.
 
 ## 3. Prepare the release
 
@@ -44,7 +44,7 @@ Commit only sanitized JSON/Markdown and the updated README table afterward. Keep
 - Set the GitHub About description to the implementation-neutral package description.
 - Review/delete old raw Actions artifacts before changing visibility. Check Actions logs separately for credentials; deleting an artifact does not delete logs.
 - Enable GitHub secret scanning, push protection and private vulnerability reporting when available for the chosen repository visibility/plan.
-- Create an annotated local candidate tag after final validation, for example `git tag -a v0.0.1-rc.1 -m "pi-codemode-bench 0.0.1 release candidate 1"`. Check for an existing tag first; do not replace published tags. Reserve the final `v0.0.1` tag for the maintainer's final release decision after any npm-publication metadata changes.
+- The first release version is **0.1.0**. The maintainer creates the final `v0.1.0` tag and GitHub Release after final validation and any npm-publication metadata changes. Check for existing tags first; never replace published tags. The earlier local `v0.0.1-rc.1` tag is historical preparation metadata, not the intended first release; do not push it as a release tag.
 
 ## 4. Publish only with maintainer approval
 

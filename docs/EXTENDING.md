@@ -7,7 +7,7 @@ The host requires Node 22.19+. Pi/OpenCode and the target interpreter are not bu
 Create a tarball with `npm pack --ignore-scripts --pack-destination=/tmp` in the source checkout. In the consumer project:
 
 ```sh
-npm install /path/to/pi-codemode-bench-0.0.1.tgz
+npm install /path/to/pi-codemode-bench-0.1.0.tgz
 npx --no-install codemode-bench --config=./targets.json --sets=all --check
 npx --no-install codemode-bench --config=./targets.json --sets=short
 ```
