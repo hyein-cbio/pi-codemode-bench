@@ -13,6 +13,6 @@ if (isMain(import.meta.url)) {
     if (interruptCode) process.exitCode = interruptCode;
     else if (result?.mode === "check" ? !result.ok : result && (!result.counts.executions || result.counts.invalid || result.sourceDrift ||
       (result.config["strict-coverage"] && result.counts.unsupported))) process.exitCode = 1;
-  } catch (error) { console.error(error.stack ?? error); process.exitCode = interruptCode ?? 1; }
+  } catch (error) { console.error(error.code === "MISSING_ENGINE_DEPENDENCY" ? error.message : error.stack ?? error); process.exitCode = interruptCode ?? 1; }
   finally { process.off("SIGINT", onInt); process.off("SIGTERM", onTerm); }
 }

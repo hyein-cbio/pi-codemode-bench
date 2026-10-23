@@ -36,6 +36,7 @@
     "check:language": "node scripts/check-language.mjs",
     "tasks": "node tasks.mjs --list",
     "test": "node --test --test-concurrency=1 test/*.test.mjs",
+    "test:pack": "node scripts/test-pack.mjs",
     "test:integration": "node --test test/integration.test.mjs",
     "test:targets": "node --test test/targets.test.mjs",
     "test:core": "node --test test/corpus.test.mjs test/fixtures.test.mjs test/generic-tool.test.mjs"
@@ -48,6 +49,16 @@
     "@earendil-works/pi-codemode": "1.0.4",
     "@earendil-works/pi-mcp": "1.0.4",
     "@earendil-works/pi-tui": "1.0.4"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "1.0.4",
+    "@opencode/codemode": "2.1.0",
+    "effect": "4.0.1"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-coding-agent": { "optional": true },
+    "@opencode/codemode": { "optional": true },
+    "effect": { "optional": true }
   },
   "devDependencies": {
     "@earendil-works/pi-coding-agent": "1.0.4",

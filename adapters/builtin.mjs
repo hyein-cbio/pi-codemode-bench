@@ -3,9 +3,12 @@ import { openNodeVm } from "./node-vm.mjs";
 export { openNodeVm } from "./node-vm.mjs";
 import { createFixture } from "../lib/fixtures.mjs";
 import { hash } from "../lib/values.mjs";
+import { packageRoot } from "../lib/packages.mjs";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 
-const piDir = new URL("../node_modules/@earendil-works/pi-coding-agent/", import.meta.url);
 export function openCodeMode() {
+  for (const name of ["@opencode/codemode", "effect"]) packageRoot(name, "opencode", ["@opencode/codemode", "effect"]);
   let modules;
   return {
     name: "codemode_o", language: "javascript", capabilities: ["tools", "per-call-deadline"],
@@ -27,6 +30,7 @@ export function openCodeMode() {
   };
 }
 export async function openNativePi() {
+  const piDir = pathToFileURL(packageRoot("@earendil-works/pi-coding-agent", "pi") + "/");
   const pkg = JSON.parse(await readFile(new URL("package.json", piDir), "utf8"));
   const executeUrl = new URL("dist/extensions/codemode/execute.js", piDir);
   const { executeCodemode } = await import(executeUrl.href);
@@ -68,7 +72,7 @@ export async function openBuiltin(name) {
   if(name==="pi" || name==="codemode") return openNativePi();
   if(name==="opencode" || name==="codemode_o") {
     const adapter=openCodeMode();
-    adapter.version=JSON.parse(await readFile(new URL("../node_modules/@opencode/codemode/package.json",import.meta.url),"utf8")).version;
+    adapter.version=JSON.parse(await readFile(join(packageRoot("@opencode/codemode", "opencode"), "package.json"),"utf8")).version;
     return adapter;
   }
   if(name==="node" || name==="node-vm") return openNodeVm();

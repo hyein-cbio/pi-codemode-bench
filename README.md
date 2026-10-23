@@ -29,6 +29,20 @@ npx --no-install codemode-bench --help
 
 A source checkout or locally built npm tarball also works, as described below.
 
+Built-in engines use optional peer dependencies installed in your project:
+
+```sh
+# --engines=pi
+npm install @earendil-works/pi-coding-agent@1.0.4
+# --engines=opencode
+npm install @opencode/codemode@2.1.0 effect@4.0.1
+# --engines=node needs no additional packages
+```
+
+These peers are not installed automatically. `npm run test:pack` checks packed
+consumer installs, including both optional engines and missing-peer diagnostics;
+it requires network access and is separate from `npm test`.
+
 ### Option A: run from source
 
 ```sh
