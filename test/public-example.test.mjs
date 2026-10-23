@@ -1,10 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { buildCases } from "../corpus/index.mjs";
 import { runCases, summarizeRows } from "../lib/runner.mjs";
 import { publicExample, comparisonTable } from "../lib/public-example.mjs";
-import { valueHash, summarize } from "../lib/values.mjs";
+import { hash, valueHash, summarize } from "../lib/values.mjs";
 
 async function syntheticReceipt() {
   const specs = buildCases(), config = { warmup: 1, samples: 3, seed: 1, sourceMode: "reused" };
@@ -41,8 +43,9 @@ async function syntheticReceipt() {
 }
 const provenance = { sourceReceiptSha256: "e".repeat(64), extension: { entrySha256: "a".repeat(64), privatePath: "/Users/private" } };
 
-test("checked-in public evidence reproduces its statistics and README table", async () => {
-  const text = await readFile(new URL("../benchmarks/results/pi-comparison.json", import.meta.url), "utf8");
+for (const [file, current] of [["pi-comparison.json", false], ["pi-comparison.release.json", true]])
+test("public evidence retains every sample and reproduces statistics: " + file, async () => {
+  const text = await readFile(new URL("../benchmarks/results/" + file, import.meta.url), "utf8");
   const example = JSON.parse(text);
   assert.equal(example.cases.length, 76);
   assert.equal(example.method.samples, 20);
@@ -71,9 +74,22 @@ test("checked-in public evidence reproduces its statistics and README table", as
   assert.equal(unsupported, 5);
   assert.equal(expectedErrors, 75);
   assert.equal(/\/(?:Users|home|private|var\/folders)\//.test(text), false);
-  const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
-  assert.ok(readme.includes(comparisonTable(example, example.readmeCases)));
-  const report = await readFile(new URL("../benchmarks/results/pi-comparison.json.md", import.meta.url), "utf8");
+  if (current) {
+    const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
+    assert.ok(readme.includes(comparisonTable(example, example.readmeCases)));
+    assert.equal(example.provenance.workingTreeDirty, false);
+    const cwd = fileURLToPath(new URL("../", import.meta.url));
+    for (const [path, expected] of Object.entries(example.provenance.implementationHashes)) {
+      const bytes = execFileSync("git", ["cat-file", "blob", example.provenance.benchmarkHead + ":./" + path], { cwd });
+      assert.equal(hash(bytes), expected, path);
+    }
+    const extension = example.implementations[1].extension;
+    assert.equal(extension.measuredSourceDirty, false);
+    assert.equal(extension.workingTreeDirty, false);
+    assert.match(extension.packageSha256, /^[a-f0-9]{64}$/);
+    assert.match(extension.lockSha256, /^[a-f0-9]{64}$/);
+  }
+  const report = await readFile(new URL("../benchmarks/results/" + file + ".md", import.meta.url), "utf8");
   assert.ok(report.includes(comparisonTable(example)));
 });
 

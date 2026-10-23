@@ -212,39 +212,43 @@ Pi tool targets dispatch actual registered tools in isolated Pi sessions. Their 
 This is **one optional implementation comparison**, not the purpose or default configuration of the benchmark. Here, “native Pi” means Pi's built-in QuickJS `codemode`, not a native-code VM or the separate Luau project. `codemode_o` is the actual tool registered by `pi-opencode-mode`, not a direct `@opencode/codemode` runtime alias.
 
 <!-- comparison:start -->
-Measured on **2026-10-22**, Apple M5 Pro / macOS arm64 / Node **26.12.1**. Both registered tools used Pi SDK **1.0.0**; `codemode_o` came from `pi-opencode-mode` **0.0.1** with OpenCode CodeMode **2.1.0**.
+Measured on **2026-10-23**, Apple M5 Pro / macOS arm64 / Node **26.12.1**. Both registered tools used Pi SDK **1.0.4**; `codemode_o` came from `pi-opencode-mode` **0.0.1**, pinned at revision `53b9dd9`, with OpenCode CodeMode **2.1.0**.
 
 **20 warm samples**, 4 warmups, and one first-invocation control per eligible cell. All 76 cases were retained: **3,675 executions, 0 invalid, 75 expected-error checks, 5 unsupported cells**.
 
-This retained measurement snapshot predates the review fixes; its recorded source hashes, not the current working tree, identify the measured implementation. Fix validation runs do not replace or pool these timing samples.
+Benchmark source: clean commit [`484627b`](https://github.com/hyein-cbio/pi-codemode-bench/commit/484627b84d81873d487a116f20fd08da0f761439). Every published benchmark source hash matches that commit. The extension revision and package/lock hashes were captured before timing and verified at export. This release baseline is separate from the [historical pre-review result](benchmarks/results/pi-comparison.json); samples are never pooled.
 
 The table is a preselected cross-section; values are **median / nearest-rank p95 in milliseconds**. It measures root tool execution, including guest runtime/bridge work but **excluding session setup and model generation**.
 
 | Case | Pi codemode median / p95 (ms) | codemode_o median / p95 (ms) |
 |---|---:|---:|
-| even-squares-10 | 10.158 / 10.803 | 0.561 / 0.803 |
-| read-reduce | 9.904 / 11.376 | 0.705 / 1.668 |
-| parallel-context | 12.594 / 13.592 | 3.381 / 3.522 |
-| cursor-pagination | 10.791 / 13.036 | 1.243 / 2.720 |
-| retry-waves | 18.499 / 20.513 | 9.010 / 9.636 |
-| fan-in-dag-64 | 21.785 / 24.801 | 12.998 / 14.053 |
-| deep-roundtrip-64 | 15.870 / 16.301 | 7.264 / 7.659 |
-| arithmetic-100000 | 12.807 / 13.660 | 203.832 / 212.545 |
-| json-records-8k-x1 | 10.111 / 11.203 | 2.904 / 3.988 |
-| json-strings-48k-x4 | 10.698 / 10.901 | 8.573 / 11.366 |
+| even-squares-10 | 13.820 / 14.774 | 0.602 / 0.745 |
+| read-reduce | 12.244 / 12.886 | 0.738 / 1.661 |
+| parallel-context | 15.243 / 18.113 | 3.210 / 3.734 |
+| cursor-pagination | 12.950 / 14.201 | 1.252 / 1.450 |
+| retry-waves | 20.106 / 20.519 | 8.857 / 9.270 |
+| fan-in-dag-64 | 23.789 / 25.372 | 13.023 / 14.313 |
+| deep-roundtrip-64 | 18.095 / 18.984 | 7.224 / 8.971 |
+| arithmetic-100000 | 15.961 / 16.942 | 211.648 / 226.553 |
+| json-records-8k-x1 | 15.369 / 16.366 | 3.984 / 5.911 |
+| json-strings-48k-x4 | 13.649 / 15.814 | 8.834 / 9.970 |
 
 In this run, short orchestration cases had lower medians with `codemode_o`, while the arithmetic control had a lower median with Pi. This is **not a universal ranking**: one host, one run, synthetic fixtures, different runtime/security limits, no confidence intervals or production-frequency weights.
 
-The five unsupported `codemode_o` cells remain visible: two 128-call cases exceed its 64-call quota; class syntax, depth-40 JSON, and per-call deadlines are not declared supported. Expected errors are validated checks, not performance wins.
+The five unsupported `codemode_o` cells remain visible: two 128-call cases exceed its 64-call quota; class syntax, depth-40 JSON, and per-call deadlines are not declared supported. Expected errors are validated checks, not performance wins. This is a pinned implementation snapshot, **not a claim about the latest extension revision**.
 
-[All 76 cases](benchmarks/results/pi-comparison.json.md) · [Public JSON with every timing sample and source hashes](benchmarks/results/pi-comparison.json)
+[All 76 cases](benchmarks/results/pi-comparison.release.json.md) · [Public JSON with every timing sample and source hashes](benchmarks/results/pi-comparison.release.json)
 <!-- comparison:end -->
 
-Reproduce with the sibling `pi-opencode-mode` checkout and its dependencies already installed. The config uses the repository's pinned Pi SDK, not the globally installed Pi CLI.
+For the exact release baseline, use benchmark source commit `484627b84d81873d487a116f20fd08da0f761439` and sibling extension revision `53b9dd937ad53cd3558b086ab21e812780524d5a` in clean checkouts with their locked dependencies installed. The config uses the repository's pinned Pi SDK, not the globally installed Pi CLI. Newer extension revisions have different routing policies and are not interchangeable with this snapshot.
 
 ```sh
-npm ci
-# Check the extension path in examples/targets/pi-comparison.json first.
+# In separate trusted checkouts; do not reset a dirty working tree.
+git checkout --detach 484627b84d81873d487a116f20fd08da0f761439
+git -C ../pi-opencode-mode checkout --detach 53b9dd937ad53cd3558b086ab21e812780524d5a
+npm ci --ignore-scripts
+npm ci --ignore-scripts --prefix ../pi-opencode-mode
+# Confirm both checkouts are clean and check the extension path first.
 npm run bench:example -- --out=results/my-pi-comparison.json
 node scripts/publish-example.mjs results/my-pi-comparison.json benchmarks/results/my-pi-comparison.json
 ```

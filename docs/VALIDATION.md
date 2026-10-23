@@ -6,13 +6,23 @@ Validated on macOS arm64, Apple M5 Pro, Node **v26.12.1**. The current release c
 
 The updated dependency lockfile installs with `npm ci --ignore-scripts`. `npm audit` and `npm audit --omit=dev` report **0 vulnerabilities** at this checkpoint. SDK 1.0.0 shipped a nested shrinkwrap that prevented the transitive security override; SDK 1.0.4 removes it. Companion Pi packages are overridden to 1.0.4 because unconstrained caret resolution to 1.4.0 broke the older SDK's codemode imports.
 
-The full suite with a separately cloned, clean `pi-opencode-mode` checkout passed **51 tests, 0 failed, 0 skipped**. New regressions cover allowlisted numeric CI summaries, rejection of dirty or unavailable committed measurement sources, changed extension package/lock commits, package-relative Git blob lookup in nested repositories, package metadata, distribution of policy documents and removal of raw artifact uploads.
+The source checkpoint's full suite with a separately cloned, clean `pi-opencode-mode` checkout passed **51 tests, 0 failed, 0 skipped**. New regressions cover allowlisted numeric CI summaries, rejection of dirty or unavailable committed measurement sources, changed extension package/lock commits, package-relative Git blob lookup in nested repositories, package metadata, distribution of policy documents and removal of raw artifact uploads.
 
 The latest existing remote workflow, [39877696480](https://github.com/hyein-cbio/pi-codemode-bench/actions/runs/39877696480), passed Linux/macOS Node 22 for commit `0eb3afa`. That is evidence for the previous commit, **not** remote validation of these unpushed housekeeping changes. Re-run CI on the final pushed release candidate.
 
 CodeRabbit completed the housekeeping source review with **0 remaining findings** after fixes for measurement-bound extension metadata, clean export checkout verification and package-relative Git blob lookup.
 
-Raw CI artifacts are no longer uploaded. CI writes only fixed labels and validated numeric demo counts to its job summary. Historical benchmark samples remain immutable; the release comparison is a separate clean-source run. No repository visibility change, Git push or npm publication is part of this checkpoint.
+Raw CI artifacts are no longer uploaded. CI writes only fixed labels and validated numeric demo counts to its job summary. Historical benchmark samples remain immutable; the release comparison is a separate clean-source run. The GitHub About description was aligned with the implementation-neutral package description. The two existing raw CI artifacts were downloaded to ignored local `results/ci-artifact-backups/` and deleted from GitHub; no public artifacts remained immediately after cleanup. This does not remove Actions logs, which need separate review before visibility changes. No repository visibility change, Git push or npm publication is part of this checkpoint.
+
+### Clean release measurement
+
+The [new public release comparison](../benchmarks/results/pi-comparison.release.json) was measured from clean local benchmark commit `484627b84d81873d487a116f20fd08da0f761439` with extension revision `53b9dd937ad53cd3558b086ab21e812780524d5a`, also clean. All retained benchmark source/config hashes match committed bytes. Extension revision and package/lock identities were captured before timing and verified at export from the same clean benchmark revision.
+
+The full corpus with 4 warmups and 20 warm samples produced **3,675 executions, 0 invalid, 75 expected-error checks, 5 unsupported cells, sourceDrift:false**. Raw evidence is local `results/release-comparison-clean.json`; only its sanitized derivative and readable report are committed. The original pre-review public JSON and report remain byte-for-byte unchanged.
+
+Final evidence/package validation passed **52 tests, 0 failed, 0 skipped** with the pinned actual extension enabled. Both npm audit modes reported 0 vulnerabilities; language and whitespace checks passed. Tests recompute both historical and release statistics and verify every new benchmark source hash against the measurement commit. CI fetches full Git history for those source-byte checks. CodeRabbit reviewed the final evidence/documentation changes with **0 findings**. Existing Actions logs were downloaded privately and checked with credential patterns without a hit; that limited check is not a complete secret audit.
+
+An earlier attempt against the newer extension revision `c147f14` recorded 75 invalid executions because its routing policy rejected three workloads; export was not performed. Another zero-invalid attempt was rejected because Finder metadata made the extension checkout dirty. Both receipts remain local and none of their samples are pooled into the published result. See [the benchmark notes](../benchmarks/README.md) for exact scope and reproduction steps.
 
 ## Standalone and extension checkpoint
 

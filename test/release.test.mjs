@@ -102,6 +102,7 @@ test("release metadata identifies the repository and CI never uploads raw receip
   assert.equal(pkg.overrides["brace-expansion"], "5.0.12");
   const workflow = await readFile(new URL(".github/workflows/ci.yml", root), "utf8");
   assert.equal(workflow.includes("actions/upload-artifact"), false);
+  assert.match(workflow, /fetch-depth: 0/);
   assert.match(workflow, /ci-summary\.mjs results\/ci-demo\.json >> "\$GITHUB_STEP_SUMMARY"/);
   for (const path of ["SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md", "docs/RELEASING.md"]) {
     assert.ok((await readFile(new URL(path, root), "utf8")).length > 0);

@@ -17,6 +17,7 @@ test("the real npm tarball executes the full demo without dependencies or a lock
     const [pkg] = JSON.parse(packed.stdout);
     const paths = pkg.files.map(f => f.path);
     assert.ok(paths.includes("benchmarks/results/pi-comparison.json"));
+    assert.ok(paths.includes("benchmarks/results/pi-comparison.release.json"));
     assert.ok(paths.includes("scripts/publish-example.mjs"));
     for (const file of ["SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md", "docs/RELEASING.md"]) assert.ok(paths.includes(file));
     assert.equal(paths.some(p => /^(results|test|node_modules|\.github)\//.test(p)), false);

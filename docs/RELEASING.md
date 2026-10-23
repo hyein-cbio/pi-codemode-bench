@@ -44,7 +44,7 @@ Commit only sanitized JSON/Markdown and the updated README table afterward. Keep
 - Set the GitHub About description to the implementation-neutral package description.
 - Review/delete old raw Actions artifacts before changing visibility. Check Actions logs separately for credentials; deleting an artifact does not delete logs.
 - Enable GitHub secret scanning, push protection and private vulnerability reporting when available for the chosen repository visibility/plan.
-- Create an annotated local release tag after final validation, for example `git tag -a v0.0.1 -m "pi-codemode-bench 0.0.1 release candidate"`. Check for an existing tag first; do not replace published tags.
+- Create an annotated local candidate tag after final validation, for example `git tag -a v0.0.1-rc.1 -m "pi-codemode-bench 0.0.1 release candidate 1"`. Check for an existing tag first; do not replace published tags. Reserve the final `v0.0.1` tag for the maintainer's final release decision after any npm-publication metadata changes.
 
 ## 4. Publish only with maintainer approval
 
