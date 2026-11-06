@@ -61,25 +61,27 @@ test("CI event policy selects main pushes, own PR lifecycle events and manual ru
   }
   const circle = await readFile(new URL("../.circleci/config.yml", import.meta.url), "utf8");
   const expression = circle.match(/    when: >-\n((?:      .*\n)+)    jobs:/)[1].trim().replace(/\s+/g, " ");
-  assert.equal(expression, 'pipeline.event.name == "api" or (pipeline.event.name == "push" and pipeline.git.branch == "main" and pipeline.git.tag == "") or (pipeline.event.name == "pull_request" and (pipeline.event.action == "opened" or pipeline.event.action == "synchronize" or pipeline.event.action == "reopened"))');
+  assert.equal(expression, 'pipeline.event.name == "api" or (pipeline.event.name == "push" and pipeline.event.github.ref == "refs/heads/main") or (pipeline.event.name == "pull_request" and (pipeline.event.action == "opened" or pipeline.event.action == "synchronize" or pipeline.event.action == "reopened"))');
   // This expression uses only string comparisons, conjunctions and disjunctions.
   // Check its truth table locally; CircleCI validation checks the real grammar.
   const predicate = expression.replace(/\band\b/g, "&&").replace(/\bor\b/g, "||");
-  for (const [event, action, branch, tag, expected] of [
-    ["push", "push", "main", "", true],
-    ["push", "push", "feature", "", false],
-    ["push", "push", "", "v1", false],
-    ["push", "push", "main", "v1", false],
-    ["pull_request", "opened", "feature", "", true],
-    ["pull_request", "synchronize", "feature", "", true],
-    ["pull_request", "reopened", "feature", "", true],
-    ["pull_request", "closed", "feature", "", false],
-    ["pull_request", "ready_for_review", "feature", "", false],
-    ["api", "api", "feature", "", true],
-    ["api", "api", "", "v1", true],
-    ["schedule", "schedule", "main", "", false],
+  for (const [event, action, ref, expected] of [
+    ["push", "push", "refs/heads/main", true],
+    ["push", "push", "refs/heads/feature", false],
+    ["push", "push", "refs/tags/v1", false],
+    ["push", "push", "refs/tags/main", false],
+    ["push", "push", "", false],
+    ["pull_request", "opened", undefined, true],
+    ["pull_request", "synchronize", undefined, true],
+    ["pull_request", "reopened", undefined, true],
+    ["pull_request", "closed", undefined, false],
+    ["pull_request", "ready_for_review", undefined, false],
+    ["api", "api", undefined, true],
+    ["schedule", "schedule", undefined, false],
   ]) {
-    const pipeline = { event: { name: event, action }, git: { branch, tag } };
+    // Do not assume a branch checkout gives an empty string for pipeline.git.tag.
+    // Real push compilation skipped main with the old checkout-metadata guard.
+    const pipeline = { event: { name: event, action, github: { ref } } };
     assert.equal(runInNewContext(predicate, { pipeline }), expected, JSON.stringify(pipeline));
   }
   // Fork PR events never reach GitHub App pipelines; that integration guarantee

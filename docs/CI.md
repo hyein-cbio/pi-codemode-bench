@@ -46,8 +46,10 @@ GitHub explicitly selects `opened`, `synchronize`, and `reopened` and keeps
 the same-repository job guard. CircleCI uses the GitHub App combined preset
 `only-build-prs` (UI: **PR opened or pushed to, default branch and tag pushes**).
 Its server rules select default-branch/tag push events and exactly those three
-PR actions. The workflow expression additionally rejects automatic tags and
-non-main pushes while retaining API/manual runs. Fork exclusion is provided by
+PR actions. The workflow expression matches the push event ref
+`refs/heads/main`, rejecting automatic tags and non-main pushes while retaining
+API/manual runs. It does not assume optional checkout branch/tag metadata is
+populated or represented as an empty string. Fork exclusion is provided by
 the GitHub App integration, not by a secret-bearing checkout or shell script.
 
 ## GitHub and Modal setup
