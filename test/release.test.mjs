@@ -115,7 +115,13 @@ test("release metadata identifies the repository and CI never uploads raw receip
   const workflow = await readFile(new URL(".github/workflows/ci.yml", root), "utf8");
   assert.equal(workflow.includes("actions/upload-artifact"), false);
   assert.match(workflow, /fetch-depth: 0/);
-  assert.match(workflow, /ci-summary\.mjs results\/ci-demo\.json >> "\$GITHUB_STEP_SUMMARY"/);
+  assert.match(workflow, /python ci\/modal_ci\.py/);
+  const modal = await readFile(new URL("ci/modal_ci.py", root), "utf8");
+  assert.match(modal, /ci-summary\.mjs results\/ci-demo\.json > \/tmp\/ci-summary\.md/);
+  const circle = await readFile(new URL(".circleci/config.yml", root), "utf8");
+  assert.equal(circle.includes("store_artifacts"), false);
+  assert.equal(circle.includes("persist_to_workspace"), false);
+  assert.match(circle, /store_test_results:\n\s+path: test-reports/);
   for (const path of ["SECURITY.md", "CONTRIBUTING.md", "CHANGELOG.md", "docs/RELEASING.md"]) {
     assert.ok((await readFile(new URL(path, root), "utf8")).length > 0);
   }

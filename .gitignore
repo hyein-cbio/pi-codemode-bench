@@ -2,3 +2,5 @@
 node_modules/
 /results/
 /bench.config.local.json
+/test-reports/
+__pycache__/

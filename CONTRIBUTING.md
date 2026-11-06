@@ -23,6 +23,12 @@ PI_BENCH_OPENCODE_EXTENSION=../pi-opencode-mode/index.js npm test
 
 A skipped optional integration is not evidence that the external target passed. Keep correctness checks, expected-error outcomes, capability gaps and timing limitations explicit.
 
+## Continuous integration
+
+Ubuntu validation runs on Modal, dispatched by GitHub Actions. macOS validation
+runs directly on CircleCI. See [CI setup and limitations](docs/CI.md) for required
+service configuration, Smarter Testing commands, and fork-PR handling.
+
 ## Pull requests and evidence
 
 - Write documentation, code comments, examples, fixture labels and reports in English. The language check detects Hangul, not all non-English writing.
