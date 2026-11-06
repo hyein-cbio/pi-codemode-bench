@@ -4,6 +4,7 @@ import { spawnSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
+import { runInNewContext } from "node:vm";
 import junitReporter from "../ci/junit-reporter.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
@@ -44,6 +45,45 @@ test("CI JUnit rejects results outside the discovered test-file domain", async (
     for await (const chunk of junitReporter([{ type: "test:pass",
       data: { file: "/tmp/private.mjs", details: {} } }])) void chunk;
   }, /unexpected test file/);
+});
+
+test("CI event policy selects main pushes, own PR lifecycle events and manual runs", async () => {
+  const workflow = await readFile(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8");
+  assert.match(workflow, /on:\n  push:\n    branches: \[main\]\n  pull_request:\n    types: \[opened, synchronize, reopened\]\n  workflow_dispatch:/);
+  const githubCondition = workflow.match(/^    if: (.+)$/m)[1];
+  assert.equal(githubCondition, "github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository");
+  for (const own of [true, false]) {
+    for (const action of ["opened", "synchronize", "reopened"]) {
+      const github = { event_name: "pull_request", repository: "owner/repo",
+        event: { action, pull_request: { head: { repo: { full_name: own ? "owner/repo" : "fork/repo" } } } } };
+      assert.equal(runInNewContext(githubCondition, { github }), own, `${action}: own=${own}`);
+    }
+  }
+  const circle = await readFile(new URL("../.circleci/config.yml", import.meta.url), "utf8");
+  const expression = circle.match(/    when: >-\n((?:      .*\n)+)    jobs:/)[1].trim().replace(/\s+/g, " ");
+  assert.equal(expression, 'pipeline.event.name == "api" or (pipeline.event.name == "push" and pipeline.git.branch == "main" and pipeline.git.tag == "") or (pipeline.event.name == "pull_request" and (pipeline.event.action == "opened" or pipeline.event.action == "synchronize" or pipeline.event.action == "reopened"))');
+  // This expression uses only string comparisons, conjunctions and disjunctions.
+  // Check its truth table locally; CircleCI validation checks the real grammar.
+  const predicate = expression.replace(/\band\b/g, "&&").replace(/\bor\b/g, "||");
+  for (const [event, action, branch, tag, expected] of [
+    ["push", "push", "main", "", true],
+    ["push", "push", "feature", "", false],
+    ["push", "push", "", "v1", false],
+    ["push", "push", "main", "v1", false],
+    ["pull_request", "opened", "feature", "", true],
+    ["pull_request", "synchronize", "feature", "", true],
+    ["pull_request", "reopened", "feature", "", true],
+    ["pull_request", "closed", "feature", "", false],
+    ["pull_request", "ready_for_review", "feature", "", false],
+    ["api", "api", "feature", "", true],
+    ["api", "api", "", "v1", true],
+    ["schedule", "schedule", "main", "", false],
+  ]) {
+    const pipeline = { event: { name: event, action }, git: { branch, tag } };
+    assert.equal(runInNewContext(predicate, { pipeline }), expected, JSON.stringify(pipeline));
+  }
+  // Fork PR events never reach GitHub App pipelines; that integration guarantee
+  // is separate from the workflow expression and cannot be simulated locally.
 });
 
 test("CI routing preserves macOS-only CircleCI and credential-scoped Modal dispatch", async () => {

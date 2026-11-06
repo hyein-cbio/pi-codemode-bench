@@ -20,12 +20,43 @@ is `npm run check:language`. No database or product API key is needed.
 - Neither path deploys or publishes a package. Neither publishes raw receipts.
   CI demo timings are conformance evidence, not comparable product benchmarks.
 
+## Event policy
+
+Both providers validate the following events:
+
+| Event | Validation |
+| --- | --- |
+| Push to main, including a PR merge | Run |
+| Same-repository PR opened, including a draft PR | Run |
+| Additional commit on an open same-repository PR | Run |
+| Same-repository PR reopened | Run |
+| Fork PR opened, updated, or reopened | Do not run |
+| Push to another branch without a PR | Do not run |
+| Automatic tag push | Do not run |
+| Manual execution | Run the selected ref |
+
+PRs may target any branch; only push events are restricted to main. A fork PR
+merged into main still triggers main validation, because the merged code is
+now part of the repository. There is no separate PR-merged trigger: it would
+duplicate the main-push check. Closing an unmerged PR or marking a draft ready
+for review does not trigger another run. No bot-specific upstream workflow is
+added by this policy.
+
+GitHub explicitly selects `opened`, `synchronize`, and `reopened` and keeps
+the same-repository job guard. CircleCI uses the GitHub App combined preset
+`only-build-prs` (UI: **PR opened or pushed to, default branch and tag pushes**).
+Its server rules select default-branch/tag push events and exactly those three
+PR actions. The workflow expression additionally rejects automatic tags and
+non-main pushes while retaining API/manual runs. Fork exclusion is provided by
+the GitHub App integration, not by a secret-bearing checkout or shell script.
+
 ## GitHub and Modal setup
 
 1. Add `MODAL_TOKEN_ID` and `MODAL_TOKEN_SECRET` as GitHub repository or
    organization Actions secrets. No secret values belong in repository files.
    Use a dedicated, minimally privileged Modal workspace/token for CI.
-2. Push a branch or open/update an internal PR. Manual dispatch is also enabled.
+2. Push to main or open/update/reopen an internal PR. Manual dispatch is enabled
+   once the workflow exists on the default branch; select the desired ref.
 3. Confirm the `Ubuntu validation (Modal)` check completes, including the remote
    test result. Image builds, remote failures, timeout, and dispatcher errors fail
    the job; merely starting a Sandbox is not success.
@@ -76,7 +107,10 @@ source changes do not invalidate the npm installation layer.
 2. In Project Settings / Project Setup, use this repository as both config and
    checkout source, with `.circleci/config.yml` as the config path. Do not pin
    checkout to the default branch instead of the triggering revision.
-3. Start with an `All pushes` trigger. Do not add overlapping push/PR triggers.
+3. Use one GitHub App trigger with the **PR opened or pushed to, default branch
+   and tag pushes** preset (CLI: `only-build-prs`). Replace the old `All pushes`
+   trigger; do not keep it or add separate default-branch/PR-merged triggers.
+   The workflow expression suppresses automatic tag and non-main push events.
    Confirm your plan permits the selected macOS image/resource class and has
    credits available.
 4. Enable VCS status updates or CircleCI GitHub Checks. Run a branch pipeline

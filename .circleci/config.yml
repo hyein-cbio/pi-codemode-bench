@@ -54,5 +54,12 @@ jobs:
 
 workflows:
   benchmark-validation-macos:
+    # Pair with the GitHub App only-build-prs preset; suppress its tag events.
+    # main pushes cover merges too. API/manual runs may select any ref.
+    when: >-
+      pipeline.event.name == "api" or
+      (pipeline.event.name == "push" and pipeline.git.branch == "main" and pipeline.git.tag == "") or
+      (pipeline.event.name == "pull_request" and
+      (pipeline.event.action == "opened" or pipeline.event.action == "synchronize" or pipeline.event.action == "reopened"))
     jobs:
       - validate-macos
