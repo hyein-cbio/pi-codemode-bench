@@ -17,6 +17,9 @@ is `npm run check:language`. No database or product API key is needed.
   `npm run bench:demo -- --out=results/ci-demo.json`, followed by the existing
   allowlisted summary generator. Optional external-target integrations still
   skip unless explicitly configured; CI does not install those targets.
+- Modal also runs `npm run test:pack` on the local tarball to check consumer
+  TypeScript resolution and optional peers. The published-version check is a
+  separate step in the [release checklist](RELEASING.md).
 - Neither path deploys or publishes a package. Neither publishes raw receipts.
   CI demo timings are conformance evidence, not comparable product benchmarks.
 

@@ -28,6 +28,7 @@ node --version
 python3 --version
 npm run check:language
 npm test
+npm run test:pack
 npm run bench:demo -- --out=results/ci-demo.json
 node scripts/ci-summary.mjs results/ci-demo.json > /tmp/ci-summary.md
 """
