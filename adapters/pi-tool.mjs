@@ -44,7 +44,7 @@ export async function openPiTool(target) {
     } catch (error) { if (error.code !== "ENOENT") throw error; }
   }
   if (!aiEntry) throw new Error("Cannot resolve the configured SDK's pi-ai dependency");
-  const { Type, createAssistantMessageEventStream } = await import(pathToFileURL(aiEntry).href);
+  const { createAssistantMessageEventStream } = await import(pathToFileURL(aiEntry).href);
   const sdkVersion = JSON.parse(await readFile(join(target.sdk, "package.json"), "utf8")).version;
 
   async function setup(fixture) {
@@ -74,7 +74,7 @@ export async function openPiTool(target) {
           api => {
             for (const name of fixture.names) api.registerTool({
               name, label: name, description: "Controlled benchmark fixture",
-              parameters: Type.Record(Type.String(), Type.Unknown()), outputSchema: Type.Unknown(),
+              parameters: { type: "object", additionalProperties: true }, outputSchema: {},
               async execute(_id, args, signal) {
                 const value = await fixture.call(name, args, signal);
                 return { content: [{ type: "text", text: typeof value === "string" ? value : JSON.stringify(value) }],

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.2 - Unreleased
+
+### Fixed
+
+- Allow file-backed benchmark workers to start from inline ESM and stdin entry points by excluding the parent's `--input-type` flag while retaining other execution flags.
+- Use optional Pi SDK 1.5.0, whose companion dependencies are exactly pinned, instead of requiring consumers to copy root overrides for Pi 1.0.4. Adapt fixture tool schemas to avoid the removed `pi-ai` Type re-export.
+
+### Added
+
+- Regression tests for equals/separate `--input-type` options, eval/stdin API entry points, registered Pi tools, and worker preload/flag preservation.
+- Packed-consumer checks for optional peers installed without overrides and inline ESM API execution.
+
+This candidate is not published to npm. Historical Pi 1.0.4 benchmark artifacts and their source identities are unchanged; current Pi 1.5.0 runs are a different implementation snapshot.
+
 ## 0.1.1 - Optional engine package resolution (2026-10-23)
 
 ### Fixed

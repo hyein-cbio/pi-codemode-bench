@@ -105,13 +105,18 @@ test("release metadata identifies the repository and CI never uploads raw receip
   }
   const changelog = await readFile(new URL("CHANGELOG.md", root), "utf8");
   assert.ok(changelog.includes(`## ${pkg.version} - `));
-  assert.equal(pkg.devDependencies["@earendil-works/pi-coding-agent"], "1.0.4");
-  for (const name of ["chord", "pi-agent-core", "pi-ai", "pi-codemode", "pi-mcp", "pi-tui"]) {
-    assert.equal(pkg.overrides["@earendil-works/" + name], "1.0.4");
+  const piVersion = "1.5.0";
+  assert.equal(pkg.devDependencies["@earendil-works/pi-coding-agent"], piVersion);
+  assert.equal(pkg.peerDependencies["@earendil-works/pi-coding-agent"], piVersion);
+  assert.equal(pkg.overrides, undefined);
+  const sdk = JSON.parse(await readFile(new URL("node_modules/@earendil-works/pi-coding-agent/package.json", root), "utf8"));
+  assert.equal(sdk.version, piVersion);
+  for (const name of ["pi-agent-core", "pi-ai", "pi-codemode", "pi-mcp", "pi-tui"]) {
+    assert.equal(sdk.dependencies["@earendil-works/" + name], piVersion);
   }
   assert.equal(pkg.repository.url, "git+https://github.com/hyein-cbio/pi-codemode-bench.git");
   assert.equal(pkg.bugs.url, "https://github.com/hyein-cbio/pi-codemode-bench/issues");
-  assert.equal(pkg.overrides["brace-expansion"], "5.0.12");
+  assert.equal(sdk.dependencies["brace-expansion"], "5.0.12");
   const workflow = await readFile(new URL(".github/workflows/ci.yml", root), "utf8");
   assert.equal(workflow.includes("actions/upload-artifact"), false);
   assert.match(workflow, /fetch-depth: 0/);

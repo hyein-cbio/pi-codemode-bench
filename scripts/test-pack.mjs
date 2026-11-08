@@ -14,6 +14,7 @@ if (extraArgs.length || (version !== undefined && !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z
   throw new Error("Usage: npm run test:pack -- [exact npm version]");
 }
 const registryArgs = version ? ["--registry=https://registry.npmjs.org/"] : [];
+const legacyRelease = version === "0.1.0" || version === "0.1.1";
 const dir = await mkdtemp(join(tmpdir(), "codemode-pack-"));
 const run = (command, args, cwd) => exec(command, args, { cwd, timeout: 180000, maxBuffer: 8 * 1024 * 1024 });
 let passed = 0;
@@ -31,7 +32,9 @@ try {
     const app = join(dir, peers ? "with-peers" : "without-peers");
     await mkdir(app);
     await writeFile(join(app, "package.json"), JSON.stringify({ name: "pack-consumer", version: "1.0.0", private: true,
-      ...(peers ? { overrides: installed.overrides } : {}) }));
+      // Historical registry releases required root overrides. A local candidate
+      // must install with its documented peers alone, without copied overrides.
+      ...(legacyRelease && peers ? { overrides: installed.overrides } : {}) }));
     await run("npm", ["install", "--no-audit", "--no-fund", ...registryArgs, spec,
       ...(peers ? Object.entries(installed.peerDependencies).map(([name, pin]) => name + "@" + pin) : [])], app);
     if (!peers) {
@@ -68,6 +71,17 @@ void [result, client];
       }
       console.log("PASS " + origin + " " + engine + (peers ? " with peers" : " without peers"));
       passed++;
+      if (!legacyRelease && (peers || engine === "node")) {
+        const out = "inline-" + engine + ".json";
+        const code = `import assert from "node:assert/strict";
+import { runBenchmark } from ${JSON.stringify(pkg.name)};
+const result = await runBenchmark(["--engines=${engine}", "--cases=read-reduce", "--warmup=0", "--samples=1", "--out=${out}"], {log: () => {}});
+assert.equal(result.counts.invalid, 0);
+assert.equal(result.counts.executions, 2);`;
+        await run(process.execPath, ["--input-type=module", "--eval", code], app);
+        console.log("PASS " + origin + " " + engine + " inline ESM API");
+        passed++;
+      }
     }
   }
   console.log("Tests: " + passed + " passed, 0 failed");

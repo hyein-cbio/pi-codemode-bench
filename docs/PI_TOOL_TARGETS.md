@@ -4,6 +4,37 @@ This is one optional host binding of the [implementation-neutral target contract
 
 `examples/targets/pi.json` selects built-in `codemode`. The separate optional `examples/targets/pi-opencode.json` selects `codemode_o` from an existing sibling `pi-opencode-mode/index.js`. This does not install the extension into Pi. A local checkout with installed dependencies is sufficient. No personal Pi settings, global package list, auth or context files are automatically loaded.
 
+## Installation
+
+The unpublished 0.1.2 candidate supports `@earendil-works/pi-coding-agent@1.5.0`.
+Install that optional peer alongside the benchmark tarball; no consumer overrides
+are required. The adapter uses plain JSON schemas for fixture tools rather than
+the `Type` export removed from newer `pi-ai` versions. Historical published
+measurements remain tied to Pi 1.0.4 and their original benchmark revision.
+
+### Legacy 0.1.1 consumers
+
+The public `pi-codemode-bench@0.1.1` release requires Pi 1.0.4, not 1.5.0. It
+also predates the inline ESM fix; use a `.mjs` entry file with that release.
+To keep using it, merge these overrides into the consumer root `package.json`
+before installing `@earendil-works/pi-coding-agent@1.0.4`:
+
+```json
+{
+  "overrides": {
+    "brace-expansion": "5.0.12",
+    "@earendil-works/chord": "1.0.4",
+    "@earendil-works/pi-agent-core": "1.0.4",
+    "@earendil-works/pi-ai": "1.0.4",
+    "@earendil-works/pi-codemode": "1.0.4",
+    "@earendil-works/pi-mcp": "1.0.4",
+    "@earendil-works/pi-tui": "1.0.4"
+  }
+}
+```
+
+Do not carry these legacy overrides into a candidate Pi 1.5.0 installation.
+
 ## Config schema (version 1)
 
 ```json
@@ -33,7 +64,7 @@ This is one optional host binding of the [implementation-neutral target contract
 | `kind` | Use `pi-tool` explicitly. Legacy configs without `kind`/`adapter` still infer this variant. |
 | `tool` | Exact registered tool name to dispatch, e.g. `codemode_o`. No fallback. |
 | `extensions` | Explicit local extension entry files or package directories. `builtin:codemode` is the only special built-in token. At least one is required. |
-| `sdk` | Optional local Pi SDK package directory (containing `package.json` and `dist/index.js`). Defaults to the repo's pinned Pi **1.0.0**, not the globally installed Pi CLI. |
+| `sdk` | Optional local Pi SDK package directory (containing `package.json` and `dist/index.js`). Defaults to the installed optional Pi SDK (pinned to **1.5.0** by the current candidate), not the globally installed Pi CLI. |
 | `language` | Case source key, default `javascript`. |
 | `capabilities` | Declared eligibility, default `["tools"]`. Include `classes`, `deep-json`, `per-call-deadline` only when supported. |
 | `inputKey` | Property receiving source code, default `code`. |

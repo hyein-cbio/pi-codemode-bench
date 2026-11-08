@@ -1,6 +1,6 @@
 {
   "name": "pi-codemode-bench",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -73,17 +73,8 @@
     "test:targets": "node --test test/targets.test.mjs",
     "test:core": "node --test test/corpus.test.mjs test/fixtures.test.mjs test/generic-tool.test.mjs"
   },
-  "overrides": {
-    "brace-expansion": "5.0.12",
-    "@earendil-works/chord": "1.0.4",
-    "@earendil-works/pi-agent-core": "1.0.4",
-    "@earendil-works/pi-ai": "1.0.4",
-    "@earendil-works/pi-codemode": "1.0.4",
-    "@earendil-works/pi-mcp": "1.0.4",
-    "@earendil-works/pi-tui": "1.0.4"
-  },
   "peerDependencies": {
-    "@earendil-works/pi-coding-agent": "1.0.4",
+    "@earendil-works/pi-coding-agent": "1.5.0",
     "@opencode/codemode": "2.1.0",
     "effect": "4.0.1"
   },
@@ -99,7 +90,7 @@
     }
   },
   "devDependencies": {
-    "@earendil-works/pi-coding-agent": "1.0.4",
+    "@earendil-works/pi-coding-agent": "1.5.0",
     "@opencode/codemode": "2.1.0",
     "effect": "4.0.1"
   }
