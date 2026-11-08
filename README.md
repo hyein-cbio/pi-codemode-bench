@@ -32,16 +32,38 @@ A source checkout or locally built npm tarball also works, as described below.
 Built-in engines use optional peer dependencies installed in your project:
 
 ```sh
-# --engines=pi
-npm install @earendil-works/pi-coding-agent@1.0.4
 # --engines=opencode
 npm install @opencode/codemode@2.1.0 effect@4.0.1
 # --engines=node needs no additional packages
 ```
 
-These peers are not installed automatically. `npm run test:pack` checks packed
-consumer installs, including both optional engines and missing-peer diagnostics;
-it requires network access and is separate from `npm test`.
+For Pi 1.0.4, first merge these pins into the root `package.json` of the
+consumer project. Pi 1.0.4 accepts later 1.x transitive releases that can
+break its CodeMode imports. npm applies overrides from the consumer root.
+
+```json
+{
+  "overrides": {
+    "brace-expansion": "5.0.12",
+    "@earendil-works/chord": "1.0.4",
+    "@earendil-works/pi-agent-core": "1.0.4",
+    "@earendil-works/pi-ai": "1.0.4",
+    "@earendil-works/pi-codemode": "1.0.4",
+    "@earendil-works/pi-mcp": "1.0.4",
+    "@earendil-works/pi-tui": "1.0.4"
+  }
+}
+```
+
+```sh
+# --engines=pi
+npm install @earendil-works/pi-coding-agent@1.0.4
+```
+
+These peers are optional. From a source checkout, `npm run test:pack` checks a
+locally packed candidate. `npm run test:pack -- 0.1.1` installs that exact release
+from the public npm registry. Both checks cover consumer types, the Node engine,
+the two optional engines with the documented overrides, and missing-peer diagnostics.
 
 ### Option A: run from source
 

@@ -52,4 +52,8 @@ The maintainer controls when the repository becomes public and when commits/tags
 
 For npm, confirm that `private: true` is absent, the intended name/version is available, and `publishConfig` selects the public npm registry. Refresh the lockfile if needed, rerun all checks and inspect the actual tarball. Registry installation instructions must match the published version; do not report publication success until the registry confirms it. The source measurement remains attached to its original revision; do not rewrite its hashes after changing package metadata.
 
+After an approved npm publication, run `npm run test:pack -- <published-version>`
+from the source checkout. Record that result separately from the candidate tarball
+check in Modal.
+
 No workflow in this repository automatically pushes, changes visibility or publishes to npm.
