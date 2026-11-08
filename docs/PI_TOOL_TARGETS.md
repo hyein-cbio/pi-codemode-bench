@@ -6,8 +6,8 @@ This is one optional host binding of the [implementation-neutral target contract
 
 ## Installation
 
-The unpublished 0.1.2 candidate supports `@earendil-works/pi-coding-agent@1.5.0`.
-Install that optional peer alongside the benchmark tarball; no consumer overrides
+Version 0.1.2 supports `@earendil-works/pi-coding-agent@1.5.0`.
+Install that optional peer alongside the benchmark package; no consumer overrides
 are required. The adapter uses plain JSON schemas for fixture tools rather than
 the `Type` export removed from newer `pi-ai` versions. Historical published
 measurements remain tied to Pi 1.0.4 and their original benchmark revision.
@@ -33,7 +33,7 @@ before installing `@earendil-works/pi-coding-agent@1.0.4`:
 }
 ```
 
-Do not carry these legacy overrides into a candidate Pi 1.5.0 installation.
+Do not carry these legacy overrides into a 0.1.2 installation with Pi 1.5.0.
 
 ## Config schema (version 1)
 
@@ -64,7 +64,7 @@ Do not carry these legacy overrides into a candidate Pi 1.5.0 installation.
 | `kind` | Use `pi-tool` explicitly. Legacy configs without `kind`/`adapter` still infer this variant. |
 | `tool` | Exact registered tool name to dispatch, e.g. `codemode_o`. No fallback. |
 | `extensions` | Explicit local extension entry files or package directories. `builtin:codemode` is the only special built-in token. At least one is required. |
-| `sdk` | Optional local Pi SDK package directory (containing `package.json` and `dist/index.js`). Defaults to the installed optional Pi SDK (pinned to **1.5.0** by the current candidate), not the globally installed Pi CLI. |
+| `sdk` | Optional local Pi SDK package directory (containing `package.json` and `dist/index.js`). Defaults to the installed optional Pi SDK (pinned to **1.5.0** by the current release), not the globally installed Pi CLI. |
 | `language` | Case source key, default `javascript`. |
 | `capabilities` | Declared eligibility, default `["tools"]`. Include `classes`, `deep-json`, `per-call-deadline` only when supported. |
 | `inputKey` | Property receiving source code, default `code`. |

@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.2 - Unreleased
+## 0.1.2 - Pi installation and inline ESM fixes (2026-11-08)
 
 ### Fixed
 
@@ -12,7 +12,7 @@
 - Regression tests for equals/separate `--input-type` options, eval/stdin API entry points, registered Pi tools, and worker preload/flag preservation.
 - Packed-consumer checks for optional peers installed without overrides and inline ESM API execution.
 
-This candidate is not published to npm. Historical Pi 1.0.4 benchmark artifacts and their source identities are unchanged; current Pi 1.5.0 runs are a different implementation snapshot.
+The engine fixes originate from commit `c2152e7cb6a6ee485c7f126acdab677e1d6e12d5`. Historical Pi 1.0.4 benchmark artifacts and their source identities are unchanged; current Pi 1.5.0 runs are a different implementation snapshot.
 
 ## 0.1.1 - Optional engine package resolution (2026-10-23)
 

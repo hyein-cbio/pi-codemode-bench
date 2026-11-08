@@ -20,13 +20,17 @@ No execution target is selected automatically. A missing or failed tool never si
 
 ## Installation
 
-Requires **Node 22.19 or later**. This source tree is the **unpublished 0.1.2 candidate**.
-Use a source checkout or locally built npm tarball below to get its fixes; do not
-try `npm install pi-codemode-bench@0.1.2` until that version is published.
+Requires **Node 22.19 or later**. Install **0.1.2** into your project:
 
-The public npm release is still **0.1.1**. It does not include the inline ESM fix
-and its Pi 1.0.4 binding needs [legacy consumer overrides](docs/PI_TOOL_TARGETS.md#legacy-011-consumers).
-The following optional-peer instructions apply to the **0.1.2 candidate**.
+```sh
+npm install pi-codemode-bench@0.1.2
+npx --no-install codemode-bench --help
+```
+
+A source checkout or locally built npm tarball also works, as described below.
+The historical **0.1.1** release lacks the inline ESM fix and its Pi 1.0.4
+binding needs [legacy consumer overrides](docs/PI_TOOL_TARGETS.md#legacy-011-consumers).
+The following optional-peer instructions apply to **0.1.2**.
 
 Built-in engines use optional peer dependencies installed in your project:
 
@@ -37,16 +41,17 @@ npm install @opencode/codemode@2.1.0 effect@4.0.1
 ```
 
 ```sh
-# --engines=pi (0.1.2 candidate)
+# --engines=pi
 npm install @earendil-works/pi-coding-agent@1.5.0
 ```
 
 Pi 1.5.0 pins its companion packages to compatible exact versions, so the
-candidate needs **no consumer `overrides`**. These peers remain optional.
+0.1.2 release needs **no consumer `overrides`**. These peers remain optional.
 From a source checkout, `npm run test:pack` checks a locally packed candidate:
 consumer types, the Node engine, optional engines installed without overrides,
 inline ESM API calls, and missing-peer diagnostics. `npm run test:pack -- 0.1.1`
 separately checks the historical registry release with its legacy overrides.
+`npm run test:pack -- 0.1.2` checks the published release, including inline ESM.
 
 ### Option A: run from source
 
@@ -207,7 +212,7 @@ if (result && "counts" in result) {
 }
 ```
 
-The candidate also supports inline ESM and stdin entry points, including
+Version 0.1.2 also supports inline ESM and stdin entry points, including
 `node --input-type=module -e 'import { runBenchmark } from "pi-codemode-bench"; await runBenchmark(["--engines=node", "--sets=smoke", "--warmup=0", "--samples=1"]);'`.
 The same entry points work with installed optional Pi/OpenCode peers; a `.mjs`
 wrapper is not required.
@@ -271,7 +276,7 @@ The five unsupported `codemode_o` cells remain visible: two 128-call cases excee
 [All 76 cases](benchmarks/results/pi-comparison.release.json.md) · [Public JSON with every timing sample and source hashes](benchmarks/results/pi-comparison.release.json)
 <!-- comparison:end -->
 
-For the exact release baseline, use benchmark source commit `484627b84d81873d487a116f20fd08da0f761439` and sibling extension revision `53b9dd937ad53cd3558b086ab21e812780524d5a` in clean checkouts with their locked dependencies installed. At that source revision the config uses Pi SDK 1.0.4, not the globally installed Pi CLI. The current candidate uses Pi 1.5.0 and must not be treated as reproducing those historical timings. Newer extension revisions have different routing policies and are not interchangeable with this snapshot.
+For the exact release baseline, use benchmark source commit `484627b84d81873d487a116f20fd08da0f761439` and sibling extension revision `53b9dd937ad53cd3558b086ab21e812780524d5a` in clean checkouts with their locked dependencies installed. At that source revision the config uses Pi SDK 1.0.4, not the globally installed Pi CLI. The current release uses Pi 1.5.0 and must not be treated as reproducing those historical timings. Newer extension revisions have different routing policies and are not interchangeable with this snapshot.
 
 ```sh
 # In separate trusted checkouts; do not reset a dirty working tree.
